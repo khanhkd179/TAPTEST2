@@ -7,23 +7,27 @@ import model.subject.Subject;
 
 public class CheckerImpl implements Checker {
     @Override
-    public boolean checkTotalStage(Division division) {
+    public int getTotalScore(Division division) {
         int score = 0;
         for (Subject s : division.getSubjectList()) {
             score += s.getScore();
         }
-        return (score >= Constant.TOTAL_PASS_SCORE);
+        return score;
     }
 
     @Override
-    public boolean canPass(Division division) {
+    public int getDivisionScore(Division division) {
         int score = 0;
         for (Subject s : division.getSubjectList()) {
             if (division.getSublistSubject().indexOf(s.getClass()) != -1) {
                 score += s.getScore();
             }
         }
-        return (score >= division.getPassScore() && checkTotalStage(division));
-
+        return score;
+    }
+    @Override
+    public boolean canPass(Division division){
+        return (getTotalScore(division)>=Constant.TOTAL_PASS_SCORE &&
+                getDivisionScore(division)>=division.getPassScore());
     }
 }
